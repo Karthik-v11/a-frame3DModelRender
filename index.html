@@ -1,0 +1,85 @@
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+
+    <!-- <script>
+        AFRAME.registerComponent('clickable', {
+            init() {
+                this.el.addEventListener('click', (event) => {
+                    const aBox = document.createElement('a-box')
+                    const touchPoint = event.detail.intersection.point
+                    aBox.setAttribute('position', touchPoint)
+                    aBox.setAttribute('color', "#4CC3D9")
+                    aBox.setAttribute('scale', '1 1 1')
+                    this.el.sceneEl.appendChild(aBox)
+                    console.log("clicked")
+                    console.log(touchPoint)
+
+                })
+            }
+        })</script> -->
+    <script>
+        AFRAME.registerComponent("color-change", {
+            init() {
+                const container = document.getElementById('container')
+                console.log("container")
+                const colorList = ['#AD50FF', '#ff9500', '#66cc00', '#5ac8fa', '#000']
+                const setColor = ({ newColor, button }) => {
+                    const modelMesh = this.el.getObject3D('mesh').getObjectByName('seat 850')
+                    modelMesh.traverse((node) => {
+                        node.material.color = new THREE.Color(newColor)
+                    })
+                    button.focus()
+                }
+                for (let i = 0; i < colorList.length; i++) {
+                    const colorButton = document.createElement('button')
+                    console.log("button created")
+                    colorButton.classList.add('carousel')
+                    colorButton.style.backgroundColor = colorList[i]
+                    container.appendChild(colorButton)
+                    // colorButton.addEventListener('click', () => {
+                    //     setColor({
+                    //         newColor: colorList[i],
+                    //         button: colorButton,
+                    //     })
+                    //     console.log("button clicked")
+                    // })
+                }
+                // this.el.sceneEl.addEventListener('realityready', () => {
+                //     // Select first button in list
+                //     const firstButton = container.getElementsByTagName('button')[0]
+                //     // set car to first button's color
+                //     setColor({ newColor: colorList[0], button: firstButton })
+                // })
+                // support horizontal scroll for more than 5 colors
+            }
+        })
+    </script>
+    <style>
+        .carousel {
+            padding: 1.5rem;
+            border: 0.3rem solid white;
+            margin: 0.5rem;
+            border-radius: 50%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <a-scene vr-mode-ui="enabled: false" cursor="rayOrigin: mouse;">
+        <a-assets>
+            <a-asset-item id="car" src="./assets/seat 850 cuope.glb">
+            </a-asset-item>
+        </a-assets>
+        <a-camera id="camera"></a-camera>
+        <a-entity gltf-model="#car" color-change scale="1 1 1" position="0 -2 -2" rotation="0 270 0"></a-entity>
+        <div id="container">
+        </div>
+
+    </a-scene>
+</body>
+
+</html>
